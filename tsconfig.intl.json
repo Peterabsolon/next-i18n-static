@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es6",
+    "jsx": "preserve",
+    "noEmit": false,
+    "outDir": ".temp/extracted"
+  }
+}

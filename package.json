@@ -5,11 +5,28 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "trans:compile": "tsc -p tsconfig.intl.json",
+    "trans:extract": "babel ./.temp/extracted -o ./.temp/messages/output.js",
+    "trans:manage": "node scripts/manageTranslations.js",
+    "trans:clean": "rimraf ./.temp",
+    "trans": "yarn trans:compile && yarn trans:extract && yarn trans:manage"
   },
   "dependencies": {
     "next": "9.4.4",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-intl": "^2.9.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@types/node": "^14.0.13",
+    "@types/react": "^16.9.38",
+    "@types/react-intl": "^2.3.18",
+    "babel-plugin-react-intl": "^4.1.0",
+    "react-intl-translations-manager": "^5.0.3",
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.5"
   }
 }
