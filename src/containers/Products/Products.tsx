@@ -1,8 +1,8 @@
 import { FormattedMessage } from "react-intl"
 
-import { messages } from "./MyPage.messages"
+import { messages } from "./Products.messages"
 
-export function MyPage() {
+export function Products() {
   return (
     <div>
       <FormattedMessage {...messages.title} />

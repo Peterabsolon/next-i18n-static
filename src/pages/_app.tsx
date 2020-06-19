@@ -1,8 +1,10 @@
 import { AppProps } from "next/app"
-import { ReactNode, useState } from "react"
+import Link from "next/link"
+import { ReactNode, useState, FC } from "react"
 import { IntlProvider, addLocaleData } from "react-intl"
 
-import { TLocale, TDictionaries } from "../constants/intl"
+import { TLocales, TLocale, TDictionaries } from "../constants/intl"
+import { ROUTES } from "../constants/routes"
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactNode {
   const [locale, setLocale] = useState<TLocale>("en")
@@ -33,21 +35,48 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactNode {
 
   return (
     <IntlProvider locale={locale} messages={dictionaries[locale]}>
-      <div>
-        <div>locale: {locale}</div>
-
-        <div>
-          <button type="button" onClick={() => handleChangeLocale("en")}>
-            EN
-          </button>
-
-          <button type="button" onClick={() => handleChangeLocale("cs")}>
-            CZ
-          </button>
-        </div>
-
+      <>
+        <LocaleSelect locale={locale} handleChange={handleChangeLocale} />
+        <Navigation locale={locale} />
         <Component {...pageProps} locale={locale} />
-      </div>
+      </>
     </IntlProvider>
   )
 }
+
+const LocaleSelect: FC<{
+  locale: TLocale
+  handleChange: (locale: TLocale) => void
+}> = ({ locale, handleChange }) => (
+  <div style={{ marginBottom: 24 }}>
+    <div>Locale: {locale}</div>
+
+    <div>
+      {Object.keys(TLocales).map((locale) => (
+        <button
+          key={locale}
+          type="button"
+          // Object.keys nukes type information so we need to typecast using "as" here
+          onClick={() => handleChange(locale as TLocale)}
+        >
+          {locale}
+        </button>
+      ))}
+    </div>
+  </div>
+)
+
+const Navigation: FC<{ locale: TLocale }> = ({ locale }) => (
+  <div style={{ marginBottom: 24 }}>
+    {Object.values(ROUTES).map(({ labels, paths }) => {
+      const path = paths[locale]
+      const label = labels[locale]
+
+      return (
+        <Link href={path} key={path}>
+          <a style={{ marginRight: 5 }}>{label}</a>
+        </Link>
+      )
+    })}
+  </div>
+)

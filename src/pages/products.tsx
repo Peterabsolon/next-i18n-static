@@ -1,3 +1,3 @@
-import { MyPage } from "../containers/MyPage"
+import { Products } from "../containers/Products"
 
-export default MyPage
+export default Products
