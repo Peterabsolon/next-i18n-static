@@ -2,13 +2,7 @@ import { AppProps } from "next/app"
 import { ReactNode, useState } from "react"
 import { IntlProvider, addLocaleData } from "react-intl"
 
-type TLocale = "cs" | "en"
-
-type TDictionaries = {
-  [key in TLocale]: {
-    [messageKey: string]: string
-  }
-}
+import { TLocale, TDictionaries } from "../constants/intl"
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactNode {
   const [locale, setLocale] = useState<TLocale>("en")

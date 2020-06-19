@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "yarn intl && next build && next export",
+    "start": "serve -s ./out",
     "intl:compile": "tsc -p tsconfig.intl.json",
     "intl:extract": "babel ./.temp/extracted -o ./.temp/messages/output.js",
     "intl:manage": "node scripts/manageTranslations.js",
@@ -27,6 +27,7 @@
     "babel-plugin-react-intl": "^4.1.0",
     "react-intl-translations-manager": "^5.0.3",
     "rimraf": "^3.0.2",
+    "serve": "^11.3.2",
     "typescript": "^3.9.5"
   }
 }
