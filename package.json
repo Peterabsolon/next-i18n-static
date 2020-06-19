@@ -6,11 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "trans:compile": "tsc -p tsconfig.intl.json",
-    "trans:extract": "babel ./.temp/extracted -o ./.temp/messages/output.js",
-    "trans:manage": "node scripts/manageTranslations.js",
-    "trans:clean": "rimraf ./.temp",
-    "trans": "yarn trans:compile && yarn trans:extract && yarn trans:manage"
+    "intl:compile": "tsc -p tsconfig.intl.json",
+    "intl:extract": "babel ./.temp/extracted -o ./.temp/messages/output.js",
+    "intl:manage": "node scripts/manageTranslations.js",
+    "intl:clean": "rimraf ./.temp",
+    "intl": "yarn intl:compile && yarn intl:extract && yarn intl:manage && yarn intl:clean"
   },
   "dependencies": {
     "next": "9.4.4",
