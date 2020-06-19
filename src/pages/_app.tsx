@@ -1,36 +1,65 @@
 import { AppProps } from "next/app"
 import Link from "next/link"
-import { ReactNode, useState, FC } from "react"
+import { ReactNode, useState, FC, useEffect } from "react"
 import { IntlProvider, addLocaleData } from "react-intl"
 
-import { TLocales, TLocale, TDictionaries } from "../constants/intl"
+import {
+  TLocales,
+  TLocale,
+  TDictionaries,
+  DEFAULT_LOCALE,
+} from "../constants/intl"
 import { ROUTES } from "../constants/routes"
 
 export default function MyApp({ Component, pageProps }: AppProps): ReactNode {
+  const [ready, setReady] = useState<boolean>(false)
   const [locale, setLocale] = useState<TLocale>("en")
   const [dictionaries, setDictionaries] = useState<TDictionaries>({
     cs: {},
     en: {},
   })
 
+  useEffect(() => {
+    loadLocale()
+  }, [])
+
+  const loadLocale = async () => {
+    const savedLocale = window.localStorage.getItem("locale") || ""
+    const validLocale = Object.keys(TLocales).includes(savedLocale)
+      ? savedLocale
+      : DEFAULT_LOCALE
+
+    handleChangeLocale(validLocale as TLocale)
+  }
+
   const fetchDictionary = async (locale: TLocale) => {
-    if (locale !== "en") {
-      const dict = await import(`../translations/locales/${locale}.json`)
-      setDictionaries({ ...dictionaries, [locale]: dict })
-    }
+    const dict = await import(`../translations/locales/${locale}.json`)
+    setDictionaries({ ...dictionaries, [locale]: dict })
   }
 
   const fetchLocaleData = async (locale: TLocale) => {
-    if (locale !== "en") {
-      const localeData = await import(`react-intl/locale-data/${locale}`)
-      addLocaleData(localeData.default)
-    }
+    const localeData = await import(`react-intl/locale-data/${locale}`)
+    addLocaleData(localeData.default)
+  }
+
+  const handleSetLocale = (locale: TLocale) => {
+    window.localStorage.setItem("locale", locale)
+    setLocale(locale)
   }
 
   const handleChangeLocale = async (locale: TLocale) => {
-    await fetchLocaleData(locale)
-    await fetchDictionary(locale)
-    setLocale(locale)
+    if (locale !== "en") {
+      await fetchLocaleData(locale)
+      await fetchDictionary(locale)
+    }
+
+    handleSetLocale(locale)
+    setReady(true)
+  }
+
+  if (!ready) {
+    // or some loader...
+    return null
   }
 
   return (
@@ -69,11 +98,15 @@ const LocaleSelect: FC<{
 const Navigation: FC<{ locale: TLocale }> = ({ locale }) => (
   <div style={{ marginBottom: 24 }}>
     {Object.values(ROUTES).map(({ labels, paths }) => {
+      // Use EN version for the link (so Next knows what to resolve from ~/pages)
+      const href = paths.en
+
+      // Grab localised version for the URL & label
       const path = paths[locale]
       const label = labels[locale]
 
       return (
-        <Link href={path} key={path}>
+        <Link href={href} as={path} key={path}>
           <a style={{ marginRight: 5 }}>{label}</a>
         </Link>
       )

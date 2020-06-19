@@ -1,3 +1,3 @@
-import { Products } from "../containers/Products"
+import { Home } from "../containers/Home"
 
-export default Products
+export default Home
