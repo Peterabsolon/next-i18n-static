@@ -76,22 +76,18 @@ export default function MyApp({ Component, pageProps }: AppProps): ReactNode {
 const LocaleSelect: FC<{
   locale: TLocale
   handleChange: (locale: TLocale) => void
-}> = ({ locale, handleChange }) => (
+}> = ({ handleChange }) => (
   <div style={{ marginBottom: 24 }}>
-    <div>Locale: {locale}</div>
-
-    <div>
-      {Object.keys(TLocales).map((locale) => (
-        <button
-          key={locale}
-          type="button"
-          // Object.keys nukes type information so we need to typecast using "as" here
-          onClick={() => handleChange(locale as TLocale)}
-        >
-          {locale}
-        </button>
-      ))}
-    </div>
+    {Object.keys(TLocales).map((locale) => (
+      <button
+        key={locale}
+        type="button"
+        // Object.keys nukes type information so we need to typecast using "as" here
+        onClick={() => handleChange(locale as TLocale)}
+      >
+        {locale}
+      </button>
+    ))}
   </div>
 )
 
